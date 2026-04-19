@@ -13,13 +13,16 @@ export function useTodos() {
     setTodos(loadFromStorage<Todo[]>(KEY, []));
   }, []);
 
-  function persist(updated: Todo[]) {
-    setTodos(updated);
-    saveToStorage(KEY, updated);
+  function persist(updater: (prev: Todo[]) => Todo[]) {
+    setTodos((prev) => {
+      const updated = updater(prev);
+      saveToStorage(KEY, updated);
+      return updated;
+    });
   }
 
   function addTodo(title: string) {
-    persist([
+    persist((prev) => [
       {
         id: crypto.randomUUID(),
         title,
@@ -29,13 +32,13 @@ export function useTodos() {
         dueDate: null,
         createdAt: new Date().toISOString(),
       },
-      ...todos,
+      ...prev,
     ]);
   }
 
   function toggleTodo(id: string) {
-    persist(
-      todos.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+    persist((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
     );
   }
 
@@ -45,16 +48,18 @@ export function useTodos() {
       Pick<Todo, "title" | "priority" | "dueDate" | "categoryId">
     >,
   ) {
-    persist(todos.map((t) => (t.id === id ? { ...t, ...updates } : t)));
+    persist((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, ...updates } : t)),
+    );
   }
 
   function deleteTodo(id: string) {
-    persist(todos.filter((t) => t.id !== id));
+    persist((prev) => prev.filter((t) => t.id !== id));
   }
 
   function resetCategory(categoryId: string) {
-    persist(
-      todos.map((t) =>
+    persist((prev) =>
+      prev.map((t) =>
         t.categoryId === categoryId ? { ...t, categoryId: null } : t,
       ),
     );
