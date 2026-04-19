@@ -34,6 +34,13 @@ export class TodoPage {
     return this.page.locator("ul li p.text-sm").allTextContents();
   }
 
+  getTodoTitleLocator(title: string) {
+    return this.page
+      .locator("li")
+      .filter({ hasText: title })
+      .locator("p.text-sm");
+  }
+
   // Opens edit modal, assigns categoryName, saves.
   async setTodoCategory(todoTitle: string, categoryName: string) {
     const item = this.page.locator("li").filter({ hasText: todoTitle });

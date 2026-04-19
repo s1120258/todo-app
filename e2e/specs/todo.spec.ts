@@ -6,8 +6,8 @@ test.describe("Todo CRUD", () => {
 
   test.beforeEach(async ({ page }) => {
     todoPage = new TodoPage(page);
-    await page.goto("/");
-    await page.evaluate(() => localStorage.clear());
+    await todoPage.goto();
+    await todoPage.clearStorage();
     await page.reload();
   });
 
@@ -20,14 +20,12 @@ test.describe("Todo CRUD", () => {
     await expect(page.getByText("買い物に行く")).toBeVisible();
   });
 
-  test("チェックボックスをクリックすると打ち消し線がつく", async ({ page }) => {
+  test("チェックボックスをクリックすると打ち消し線がつく", async () => {
     await todoPage.addTodo("運動する");
     await todoPage.toggleTodo("運動する");
-    const title = page
-      .locator("li")
-      .filter({ hasText: "運動する" })
-      .locator("p.text-sm");
-    await expect(title).toHaveClass(/line-through/);
+    await expect(todoPage.getTodoTitleLocator("運動する")).toHaveClass(
+      /line-through/,
+    );
   });
 
   test("削除ボタンをクリックするとリストから消える", async ({ page }) => {
