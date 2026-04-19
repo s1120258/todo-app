@@ -31,7 +31,10 @@ export default function CategoryManager({
   const [name, setName] = useState("");
   const [color, setColor] = useState(PALETTE[0]);
 
-  function handleAdd() {
+  function handleAdd(e?: React.FormEvent) {
+    if (e) {
+      e.preventDefault();
+    }
     const trimmed = name.trim();
     if (!trimmed) return;
     onAdd(trimmed, color);
@@ -52,7 +55,7 @@ export default function CategoryManager({
           </button>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <form onSubmit={handleAdd} className="flex flex-col gap-2">
           <input
             type="text"
             value={name}
@@ -64,6 +67,7 @@ export default function CategoryManager({
             {PALETTE.map((c) => (
               <button
                 key={c}
+                type="button"
                 onClick={() => setColor(c)}
                 className={`w-7 h-7 rounded-full border-2 ${color === c ? "border-gray-700" : "border-transparent"}`}
                 style={{ backgroundColor: c }}
@@ -71,13 +75,13 @@ export default function CategoryManager({
             ))}
           </div>
           <button
-            onClick={handleAdd}
+            type="submit"
             disabled={!name.trim()}
             className="bg-blue-500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 disabled:opacity-50"
           >
             追加
           </button>
-        </div>
+        </form>
 
         <ul className="flex flex-col gap-2 overflow-y-auto">
           {categories.length === 0 && (
