@@ -60,6 +60,17 @@ Routes live in `app/api/todos/route.ts`. Use standard REST verbs. Response shape
 
 React Testing Library + Jest. Colocate tests as `ComponentName.test.tsx` or place in `tests/`. Target >80% coverage on critical paths.
 
+### Test Rules
+
+- Always verify real behavior — never write meaningless assertions like `expect(true).toBe(true)`.
+- Each test must cover a specific input and expected output, including edge cases and error paths.
+- Keep mocks minimal; prefer testing actual behavior over mocked internals.
+- Never hardcode values in production code just to make tests pass. No `if (testMode)` branches or magic numbers.
+- Start from a failing test (Red → Green → Refactor).
+- Test names must clearly describe what is being tested.
+- Prioritize actual quality over coverage numbers.
+- If requirements are unclear, ask rather than guessing.
+
 ## Environment
 
 ```bash
