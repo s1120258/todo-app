@@ -14,8 +14,9 @@ export class TodoPage {
   // --- Todo operations ---
 
   async addTodo(title: string) {
-    await this.page.getByPlaceholder("新しいタスクを入力...").fill(title);
-    await this.page.getByPlaceholder("新しいタスクを入力...").press("Enter");
+    const input = this.page.getByPlaceholder("新しいタスクを入力...");
+    await input.fill(title);
+    await input.press("Enter");
   }
 
   async toggleTodo(title: string) {
@@ -64,8 +65,17 @@ export class TodoPage {
   }
 
   async closeCategoryManager() {
-    await this.page.getByRole("button", { name: "✕" }).click();
+    await this.page
+      .locator(".fixed.inset-0")
+      .getByRole("button", { name: "✕" })
+      .click();
     await this.page.locator(".fixed.inset-0").waitFor({ state: "hidden" });
+  }
+
+  async deleteCategory(name: string) {
+    const modal = this.page.locator(".fixed.inset-0");
+    const row = modal.locator("li").filter({ hasText: name });
+    await row.getByRole("button", { name: "削除" }).click();
   }
 
   async filterByCategory(nameOrAll: string) {
