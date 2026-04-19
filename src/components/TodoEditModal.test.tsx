@@ -93,6 +93,7 @@ describe("TodoEditModal", () => {
   });
 
   it("calls onSave with dueDate when date is set", async () => {
+    const user = userEvent.setup();
     const onSave = vi.fn();
     const { container } = render(
       <TodoEditModal
@@ -104,7 +105,7 @@ describe("TodoEditModal", () => {
     );
     const dateInput = container.querySelector('input[type="date"]')!;
     fireEvent.change(dateInput, { target: { value: "2025-12-31" } });
-    await userEvent.click(screen.getByRole("button", { name: "保存" }));
+    await user.click(screen.getByRole("button", { name: "保存" }));
     expect(onSave).toHaveBeenCalledWith(
       "todo-1",
       expect.objectContaining({ dueDate: "2025-12-31" }),
@@ -112,6 +113,7 @@ describe("TodoEditModal", () => {
   });
 
   it("calls onSave with dueDate=null when date is cleared", async () => {
+    const user = userEvent.setup();
     const onSave = vi.fn();
     const { container } = render(
       <TodoEditModal
@@ -123,7 +125,7 @@ describe("TodoEditModal", () => {
     );
     const dateInput = container.querySelector('input[type="date"]')!;
     fireEvent.change(dateInput, { target: { value: "" } });
-    await userEvent.click(screen.getByRole("button", { name: "保存" }));
+    await user.click(screen.getByRole("button", { name: "保存" }));
     expect(onSave).toHaveBeenCalledWith(
       "todo-1",
       expect.objectContaining({ dueDate: null }),
