@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app diff)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app status)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app add .claude/settings.local.json)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app commit -m ' *)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app diff --staged)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app diff --staged --stat)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app rm --cached .claude/settings.local.json)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app add .gitignore)",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app commit -m \"chore: ignore .claude/settings.local.json and untrack it\")",
+      "Bash(git -C /Users/mk/Develop/Private/Harness/todo-app log --oneline -5)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // .tool_response.filePath' | { read -r f; npx eslint --fix \"$f\" 2>/dev/null; npx prettier --write \"$f\" 2>/dev/null; } || true"
+          }
+        ]
+      }
+    ]
+  }
+}
