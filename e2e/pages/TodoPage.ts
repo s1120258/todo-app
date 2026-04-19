@@ -46,14 +46,17 @@ export class TodoPage {
     const item = this.page.locator("li").filter({ hasText: todoTitle });
     await item.hover();
     await item.getByRole("button", { name: "編集" }).click();
-    await this.page.getByText("タスクを編集").waitFor();
-    // combobox[0] = priority, combobox[1] = category
-    await this.page
+    const modal = this.page.locator(".fixed.inset-0").filter({
+      hasText: "タスクを編集",
+    });
+    await modal.waitFor();
+    // Scope to modal: combobox[0] = priority, combobox[1] = category
+    await modal
       .getByRole("combobox")
       .nth(1)
       .selectOption({ label: categoryName });
     await this.page.getByRole("button", { name: "保存" }).click();
-    await this.page.getByText("タスクを編集").waitFor({ state: "hidden" });
+    await modal.waitFor({ state: "hidden" });
   }
 
   // --- Category operations ---
