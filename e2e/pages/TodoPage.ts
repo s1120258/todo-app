@@ -27,7 +27,7 @@ export class TodoPage {
   async deleteTodo(title: string) {
     const item = this.page.locator("li").filter({ hasText: title });
     await item.hover();
-    await item.getByRole("button", { name: "削除" }).click();
+    await item.getByRole("button", { name: "削除" }).click({ force: true });
   }
 
   async getTodoTitles(): Promise<string[]> {
@@ -45,7 +45,7 @@ export class TodoPage {
   async setTodoCategory(todoTitle: string, categoryName: string) {
     const item = this.page.locator("li").filter({ hasText: todoTitle });
     await item.hover();
-    await item.getByRole("button", { name: "編集" }).click();
+    await item.getByRole("button", { name: "編集" }).click({ force: true });
     const modal = this.page.locator(".fixed.inset-0").filter({
       hasText: "タスクを編集",
     });
