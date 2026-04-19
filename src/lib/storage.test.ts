@@ -21,11 +21,13 @@ describe("loadFromStorage", () => {
 
   it("returns fallback when window is undefined", () => {
     const originalWindow = globalThis.window;
-    // @ts-expect-error
-    delete globalThis.window;
-    const result = loadFromStorage("key", "fallback");
-    globalThis.window = originalWindow;
-    expect(result).toBe("fallback");
+    try {
+      // @ts-expect-error
+      delete globalThis.window;
+      expect(loadFromStorage("key", "fallback")).toBe("fallback");
+    } finally {
+      globalThis.window = originalWindow;
+    }
   });
 });
 
