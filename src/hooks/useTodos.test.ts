@@ -88,6 +88,7 @@ describe("useTodos", () => {
       result.current.addTodo("Todo A");
       result.current.addTodo("Todo B");
     });
+    // addTodo prepends, so B (added second) is at [0], A (added first) is at [1]
     const [idB, idA] = result.current.todos.map((t) => t.id);
     act(() => {
       result.current.updateTodo(idA, { categoryId: "cat-1" });
@@ -127,7 +128,6 @@ describe("useTodos", () => {
       ]),
     );
     const { result } = renderHook(() => useTodos());
-    act(() => {});
     expect(result.current.todos[0].title).toBe("Saved");
   });
 });
