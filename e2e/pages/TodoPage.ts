@@ -55,7 +55,7 @@ export class TodoPage {
       .getByRole("combobox")
       .nth(1)
       .selectOption({ label: categoryName });
-    await this.page.getByRole("button", { name: "保存" }).click();
+    await modal.getByRole("button", { name: "保存" }).click();
     await modal.waitFor({ state: "hidden" });
   }
 
